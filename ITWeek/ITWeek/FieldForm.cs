@@ -17,6 +17,12 @@ namespace ITWeek
             InitializeComponent();
         }
 
+        public FieldForm(string text)
+        {
+            InitializeComponent();
+            textBox1.Text = text;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if(string.IsNullOrEmpty(textBox1.Text))

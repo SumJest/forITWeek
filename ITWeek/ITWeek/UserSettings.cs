@@ -16,10 +16,16 @@ namespace ITWeek
         {
             InitializeComponent();
         }
+        public UserSettings(string name, int points)
+        {
+            InitializeComponent();
+            label4.Text = name;
+            label3.Text = points.ToString();
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FieldForm form = new FieldForm();
+            FieldForm form = new FieldForm("" + label4.Text);
             if(form.ShowDialog() == DialogResult.OK)
             {
                 label4.Text = form.textBox1.Text;
@@ -34,7 +40,9 @@ namespace ITWeek
                 int points = 0;
                 if(int.TryParse(form.textBox1.Text, out points))
                 {
-                    label3.Text = int.Parse(label3.Text) + points + "";
+                    int ipoints = 0;
+                    int.TryParse(label3.Text, out ipoints);
+                    label3.Text = (ipoints + points).ToString();
                 }
             }
         }
@@ -47,7 +55,9 @@ namespace ITWeek
                 int points = 0;
                 if (int.TryParse(form.textBox1.Text, out points))
                 {
-                    label3.Text = int.Parse(label3.Text) - points + "";
+                    int ipoints = 0;
+                    int.TryParse(label3.Text, out ipoints);
+                    label3.Text = (ipoints - points).ToString();
                 }
             }
         }
@@ -55,6 +65,16 @@ namespace ITWeek
         private void button4_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            if(!string.IsNullOrEmpty(label4.Text) && int.TryParse(label3.Text, out i))
+            {
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
     }
 }

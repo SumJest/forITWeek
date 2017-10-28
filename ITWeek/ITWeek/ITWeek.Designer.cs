@@ -44,6 +44,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(445, 199);
             this.listBox1.TabIndex = 0;
+            this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
             // button1
             // 
@@ -65,8 +66,9 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "Удалить";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // Form1
+            // ITWeek
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -75,8 +77,8 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
             this.MinimumSize = new System.Drawing.Size(623, 300);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "ITWeek";
+            this.Text = "ITWeek";
             this.ResumeLayout(false);
 
         }

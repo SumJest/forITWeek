@@ -56,7 +56,11 @@
             this.ClientSize = new System.Drawing.Size(284, 79);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FieldForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FieldForm";
             this.ResumeLayout(false);
             this.PerformLayout();
