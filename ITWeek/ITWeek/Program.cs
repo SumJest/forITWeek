@@ -23,21 +23,22 @@ namespace ITWeek
             }
             if(Directory.GetFiles(path).Length==0)
             {
-                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
                 RootForm rf = new RootForm();
                 if(rf.ShowDialog() == DialogResult.OK)
                 {
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new ITWeek());
+                    Application.EnableVisualStyles();
+                    Application.Run(new ITWeek(rf.conninfo));
                 }
             }else
             {
-                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
                 LoginForm lf = new LoginForm();
                 if(lf.ShowDialog() == DialogResult.OK)
                 {
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new ITWeek());
+                    Application.EnableVisualStyles();
+                    Application.Run(new ITWeek(lf.conninfo));
                 }
             }
             

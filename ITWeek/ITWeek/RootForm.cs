@@ -20,6 +20,8 @@ namespace ITWeek
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
         public static extern short GetKeyState(int keyCode);
 
+        public ConnInfo conninfo;
+
         bool isMatch = false;
 
 
@@ -94,7 +96,7 @@ namespace ITWeek
             }
             try
             {
-                MySqlConnection connection = new MySqlConnection(string.Format("server={0};user={1};database=itweek;password={2}", textBox1.Text, textBox2.Text, textBox3.Text));
+                MySqlConnection connection = new MySqlConnection(string.Format("server={0};user={1};database=usersitweek;password={2}", textBox1.Text, textBox2.Text, textBox3.Text));
                 connection.Open();
                 connection.Close();
             }catch(Exception ex)
@@ -112,6 +114,7 @@ namespace ITWeek
                 FileStream stream = File.Create(Application.StartupPath + @"\users\" + textBox4.Text);
                 stream.Write(edata, 0,edata.Length);
                 stream.Close();
+                conninfo = new ConnInfo(textBox1.Text, textBox2.Text, textBox3.Text);
                 DialogResult = DialogResult.OK;
                 this.Close();
             }

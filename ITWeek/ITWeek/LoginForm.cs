@@ -18,6 +18,8 @@ namespace ITWeek
             InitializeComponent();
         }
 
+        public ConnInfo conninfo;
+
         private void button1_Click(object sender, EventArgs e)
         {
             string dir = Application.StartupPath + "\\users";
@@ -37,7 +39,10 @@ namespace ITWeek
                 byte[] edata = File.ReadAllBytes(Directory.GetFiles(dir)[0]);
                 byte[] data = rcc5.Decode(edata);
                 string sdata = Encoding.ASCII.GetString(data);
-                Console.WriteLine(sdata);
+                string[] msdata = sdata.Split('\n');
+                conninfo = new ConnInfo(msdata[0], msdata[1], msdata[2]);
+                DialogResult = DialogResult.OK;
+                Close();
             }catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, ex.GetType().ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);

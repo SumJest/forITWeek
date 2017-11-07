@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using MySql.Data.MySqlClient;
+
 namespace ITWeek
 {
     public partial class ITWeek : Form
@@ -16,10 +18,13 @@ namespace ITWeek
 
         private string CSVpath = Application.StartupPath + @"\data\users.csv";
 
-        public ITWeek()
+        private ConnInfo conninfo;
+
+        public ITWeek(ConnInfo conninfo)
         {
             InitializeComponent();
             LoadCSV();
+            this.conninfo = conninfo;
         }
         private Dictionary<string, int> ReadInCSV(string absolutePath)
         {
@@ -34,6 +39,15 @@ namespace ITWeek
             }
             return result;
         }
+        public void add2mysql(int id, string name, string klass, int points)
+        {
+            string con = "server=" + conninfo.Server + ";user=" + conninfo.Username + ";database=usersitweek;passsword=" + conninfo.Password + ";";
+            MySqlConnection connection = new MySqlConnection("server=localhost;user=root;database=usersitweek;password=J5h8abc7b");
+            connection.Open();
+            MySqlCommand cmd = new MySqlCommand(string.Format(@"INSERT INTO students VALUES({0},{1},{2},{3})", id, name, klass, points), connection);
+            cmd.ExecuteScalar();
+            connection.Close();
+        } 
         private void WriteInCSV(string absolutePath, Dictionary<string,int> dict)
         {
             string a = "";
@@ -87,7 +101,8 @@ namespace ITWeek
             {
                 listBox1.Items.Add(settings.label4.Text + " " + settings.label3.Text);
             }
-            SaveCSV();
+      //      SaveCSV();
+            add2mysql(listBox1.Items.Count-1, settings.label4.Text, "N", int.Parse(settings.label3.Text));
         }
 
         private void button2_Click(object sender, EventArgs e)

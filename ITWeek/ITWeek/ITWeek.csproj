@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnInfo.cs" />
     <Compile Include="FieldForm.cs">
       <SubType>Form</SubType>
     </Compile>
