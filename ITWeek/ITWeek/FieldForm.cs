@@ -12,6 +12,8 @@ namespace ITWeek
 {
     public partial class FieldForm : Form
     {
+
+
         public FieldForm()
         {
             InitializeComponent();
@@ -31,6 +33,14 @@ namespace ITWeek
                 return;
             }
             this.DialogResult = DialogResult.OK;
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1_Click(null, null);
+            }
         }
     }
 }

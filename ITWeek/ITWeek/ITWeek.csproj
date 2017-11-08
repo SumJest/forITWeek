@@ -83,6 +83,7 @@
     <Compile Include="RootForm.Designer.cs">
       <DependentUpon>RootForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Student.cs" />
     <Compile Include="UserSettings.cs">
       <SubType>Form</SubType>
     </Compile>
