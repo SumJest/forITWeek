@@ -34,7 +34,6 @@ namespace ITWeek
         }
         public void UpdateBD()
         {
-            Console.WriteLine(conn_string.ToString());
             MySqlConnection connection = new MySqlConnection(conn_string.ToString());
             connection.Open();
             MySqlCommand cmd = new MySqlCommand("SELECT * FROM students",connection);
@@ -122,33 +121,19 @@ namespace ITWeek
             UserSettings settings = new UserSettings();
             if(settings.ShowDialog() == DialogResult.OK)
             {
-                List<string> list = new List<string>();
                 bool end = false;
                 for(int i = 0; i < listBox1.Items.Count; i ++)
                 {
-                    if(end)
-                    {
-                        list.Add(listBox1.Items[i].ToString());
-                        continue;
-                    }
                     if(int.Parse(listBox1.Items[i].ToString().Split(' ')[0]) != i)
                     {
-                      
                         add2mysql(i, settings.label4.Text, settings.label6.Text, int.Parse(settings.label3.Text));
-                        list.Add(i + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);
-                        list.Add(listBox1.Items[i].ToString());
+                        //list.Add(i + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);
+                        //list.Add(listBox1.Items[i].ToString());
+                        listBox1.Items.Insert(i, i + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);
                         end = true;
-                    }else
-                    {
-                        list.Add(listBox1.Items[i].ToString());
                     }
                 }
-                if (!end) { add2mysql(list.Count, settings.label4.Text, settings.label6.Text, int.Parse(settings.label3.Text)); list.Add(list.Count + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text); }
-                listBox1.Items.Clear();
-                foreach(string s in list)
-                {
-                    listBox1.Items.Add(s);
-                }
+                if (!end) { add2mysql(listBox1.Items.Count, settings.label4.Text, settings.label6.Text, int.Parse(settings.label3.Text)); listBox1.Items.Add(listBox1.Items.Count + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text); }
 
             }
       //      SaveCSV();

@@ -15,8 +15,7 @@ namespace ITWeek
         [STAThread]
         static void Main(string[] args)
         {
-
-            string path = Application.StartupPath + "\\users";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\itweek\\user";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

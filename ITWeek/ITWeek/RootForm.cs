@@ -24,6 +24,7 @@ namespace ITWeek
 
         bool isMatch = false;
 
+        MySqlConnectionStringBuilder conn_string = new MySqlConnectionStringBuilder();
 
         public RootForm()
         {
@@ -96,7 +97,11 @@ namespace ITWeek
             }
             try
             {
-                MySqlConnection connection = new MySqlConnection(string.Format("server={0};user={1};database=usersitweek;password={2}", textBox1.Text, textBox2.Text, textBox3.Text));
+                conn_string.Server = textBox1.Text;
+                conn_string.UserID = textBox2.Text;
+                conn_string.Password = textBox3.Text;
+                conn_string.Database = "usersitweek";
+                MySqlConnection connection = new MySqlConnection(conn_string.ToString());
                 connection.Open();
                 connection.Close();
             }catch(Exception ex)
@@ -109,9 +114,14 @@ namespace ITWeek
             byte[] data = Encoding.ASCII.GetBytes(sdata);
             try
             {
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\itweek\\user\\" + textBox4.Text;
+                if (!Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                }
                 RCC5 rcc5 = new RCC5(Encoding.ASCII.GetBytes(textBox5.Text));
                 byte[] edata = rcc5.Encode(data);
-                FileStream stream = File.Create(Application.StartupPath + @"\users\" + textBox4.Text);
+                FileStream stream = File.Create(path);
                 stream.Write(edata, 0,edata.Length);
                 stream.Close();
                 conninfo = new ConnInfo(textBox1.Text, textBox2.Text, textBox3.Text);

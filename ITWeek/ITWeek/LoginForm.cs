@@ -22,7 +22,7 @@ namespace ITWeek
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string dir = Application.StartupPath + "\\users";
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\itweek\\user";
             if (Directory.GetFiles(dir).Length == 0)
             {
                 MessageBox.Show("Файл пользователя не найден! Перезапустите программу.", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
