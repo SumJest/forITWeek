@@ -29,7 +29,7 @@ namespace ITWeek
             conn_string.Server = conninfo.Server;
             conn_string.UserID = conninfo.Username;
             conn_string.Password = conninfo.Password;
-            conn_string.Database = "usersitweek";
+            conn_string.Database = "itweek";
             UpdateBD();
         }
         public void UpdateBD()
@@ -38,6 +38,8 @@ namespace ITWeek
             connection.Open();
             MySqlCommand cmd = new MySqlCommand("SELECT * FROM students",connection);
             MySqlDataReader reader = cmd.ExecuteReader();
+            int id = listBox1.SelectedIndex;
+            listBox1.Items.Clear();
             while (reader.Read())
             {
                 string line = "";
@@ -48,6 +50,8 @@ namespace ITWeek
                 }
                 listBox1.Items.Add(line);
             }
+            if (id>-1 && id<listBox1.Items.Count) { listBox1.SelectedIndex = id; }
+            connection.Close();
         }
         private Dictionary<string, int> ReadInCSV(string absolutePath)
         {
@@ -189,6 +193,16 @@ namespace ITWeek
                    // SaveCSV();
                 }
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            UpdateBD();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            UpdateBD();
         }
     }
 }

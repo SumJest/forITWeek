@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -100,7 +95,7 @@ namespace ITWeek
                 conn_string.Server = textBox1.Text;
                 conn_string.UserID = textBox2.Text;
                 conn_string.Password = textBox3.Text;
-                conn_string.Database = "usersitweek";
+                conn_string.Database = "itweek";
                 MySqlConnection connection = new MySqlConnection(conn_string.ToString());
                 connection.Open();
                 connection.Close();
