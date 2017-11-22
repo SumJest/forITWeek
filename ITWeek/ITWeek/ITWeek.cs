@@ -48,7 +48,11 @@ namespace ITWeek
                     if (string.IsNullOrEmpty(line)) { line += reader[i]; }
                     else { line += " " + reader[i]; }
                 }
-                listBox1.Items.Add(line);
+                if (textBox1.Text!= "") { if (line.ToLower().Contains(textBox1.Text.ToLower())) listBox1.Items.Add(line); }
+                else
+                {
+                    listBox1.Items.Add(line);
+                }
             }
             if (id>-1 && id<listBox1.Items.Count) { listBox1.SelectedIndex = id; }
             connection.Close();
@@ -203,6 +207,14 @@ namespace ITWeek
         private void timer1_Tick(object sender, EventArgs e)
         {
             UpdateBD();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if(textBox1.Text=="")
+            {
+                UpdateBD();
+            }
         }
     }
 }
