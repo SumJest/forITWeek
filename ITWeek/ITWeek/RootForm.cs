@@ -20,11 +20,11 @@ namespace ITWeek
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
         public static extern short GetKeyState(int keyCode);
 
-        public ConnInfo conninfo;
+       // public ConnInfo conninfo;
 
         bool isMatch = false;
 
-        MySqlConnectionStringBuilder conn_string = new MySqlConnectionStringBuilder();
+        public MySqlConnectionStringBuilder conn_string = new MySqlConnectionStringBuilder();
 
         public RootForm()
         {
@@ -124,7 +124,7 @@ namespace ITWeek
                 FileStream stream = File.Create(path);
                 stream.Write(edata, 0,edata.Length);
                 stream.Close();
-                conninfo = new ConnInfo(textBox1.Text, textBox2.Text, textBox3.Text);
+                //conninfo = new ConnInfo(textBox1.Text, textBox2.Text, textBox3.Text);
                 DialogResult = DialogResult.OK;
                 this.Close();
             }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using MySql.Data.MySqlClient;
 
 namespace ITWeek
 {
@@ -18,7 +19,7 @@ namespace ITWeek
             InitializeComponent();
         }
 
-        public ConnInfo conninfo;
+        public MySqlConnectionStringBuilder conn_string = new MySqlConnectionStringBuilder();
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -40,7 +41,13 @@ namespace ITWeek
                 byte[] data = rcc5.Decode(edata);
                 string sdata = Encoding.ASCII.GetString(data);
                 string[] msdata = sdata.Split('\n');
-                conninfo = new ConnInfo(msdata[0], msdata[1], msdata[2]);
+                conn_string.Server = msdata[0];
+                conn_string.UserID = msdata[1];
+                conn_string.Password = msdata[2];
+                conn_string.Database = "usersitweek";
+                MySqlConnection connection = new MySqlConnection(conn_string.ToString());
+                connection.Open();
+                connection.Close();
                 DialogResult = DialogResult.OK;
                 Close();
             }catch(Exception ex)

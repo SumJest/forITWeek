@@ -21,23 +21,38 @@ namespace ITWeek
         MySqlConnectionStringBuilder conn_string = new MySqlConnectionStringBuilder();
 
         //private List<Student> students = new List<Student>();
-
-        public ITWeek(ConnInfo conninfo)
+        MySqlConnection connection;
+        
+        public ITWeek(MySqlConnectionStringBuilder conn_string)
         {
             InitializeComponent();
             // LoadCSV();
-            conn_string.Server = conninfo.Server;
-            conn_string.UserID = conninfo.Username;
-            conn_string.Password = conninfo.Password;
+            //conn_string.Server = conninfo.Server;
+            //conn_string.UserID = conninfo.Username;
+            //conn_string.Password = conninfo.Password;
+            this.conn_string = conn_string;
             conn_string.Database = "usersitweek";
+            Connect2BD();
             UpdateBD();
+        }
+        public void Connect2BD()
+        {
+            try
+            {
+                connection = new MySqlConnection(conn_string.ToString());
+                connection.Open();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.GetType().ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
         public void UpdateBD()
         {
-            MySqlConnection connection = new MySqlConnection(conn_string.ToString());
-            connection.Open();
+            if (connection.State != ConnectionState.Open) { Connect2BD(); }
             MySqlCommand cmd = new MySqlCommand("SELECT * FROM students",connection);
             MySqlDataReader reader = cmd.ExecuteReader();
+            listBox1.Items.Clear();
             while (reader.Read())
             {
                 string line = "";
@@ -48,74 +63,75 @@ namespace ITWeek
                 }
                 listBox1.Items.Add(line);
             }
+            reader.Close();
+            connection.Close();
         }
-        private Dictionary<string, int> ReadInCSV(string absolutePath)
-        {
-            Dictionary<string, int> result = new Dictionary<string, int>();
-            using (StreamReader fileReader = File.OpenText(absolutePath))
-            {
-                while(!fileReader.EndOfStream)
-                {
-                    string[] line = fileReader.ReadLine().Split(',');
-                    result.Add(line[0], int.Parse(line[1]));
-                }
-            }
-            return result;
-        }
+        //private Dictionary<string, int> ReadInCSV(string absolutePath)
+        //{
+        //    Dictionary<string, int> result = new Dictionary<string, int>();
+        //    using (StreamReader fileReader = File.OpenText(absolutePath))
+        //    {
+        //        while(!fileReader.EndOfStream)
+        //        {
+        //            string[] line = fileReader.ReadLine().Split(',');
+        //            result.Add(line[0], int.Parse(line[1]));
+        //        }
+        //    }
+        //    return result;
+        //}
         public void add2mysql(int id, string name, string klass, int points)
         {
-            MySqlConnection connection = new MySqlConnection(conn_string.ToString()); 
-            connection.Open();
+            if (connection.State != ConnectionState.Open) { Connect2BD(); }
             MySqlCommand cmd = new MySqlCommand(string.Format("INSERT INTO students VALUES({0},'{1}','{2}',{3})", id, name, klass, points), connection);
             cmd.ExecuteNonQuery();
             connection.Close();
         } 
-        private void WriteInCSV(string absolutePath, Dictionary<string,int> dict)
-        {
-            string a = "";
-            foreach (string sa in dict.Keys)
-            {
-                if (a == "")
-                {
-                    a += sa + "," + dict[sa];
-                }
-                else
-                {
-                    a += "\n" + sa + "," + dict[sa];
-                }
-            }
-            byte[] s = Encoding.UTF8.GetBytes(a);
-            File.Delete(absolutePath);
-            using (FileStream fileReader = File.OpenWrite(absolutePath))
-            {
-                fileReader.Write(s, 0, s.Length);
-                fileReader.Close();
-            }
+        //private void WriteInCSV(string absolutePath, Dictionary<string,int> dict)
+        //{
+        //    string a = "";
+        //    foreach (string sa in dict.Keys)
+        //    {
+        //        if (a == "")
+        //        {
+        //            a += sa + "," + dict[sa];
+        //        }
+        //        else
+        //        {
+        //            a += "\n" + sa + "," + dict[sa];
+        //        }
+        //    }
+        //    byte[] s = Encoding.UTF8.GetBytes(a);
+        //    File.Delete(absolutePath);
+        //    using (FileStream fileReader = File.OpenWrite(absolutePath))
+        //    {
+        //        fileReader.Write(s, 0, s.Length);
+        //        fileReader.Close();
+        //    }
            
-        }
-        public void SaveCSV()
-        {
-            Dictionary<string, int> dict = new Dictionary<string, int>();
-            foreach(string s in listBox1.Items)
-            {    
-                string a = "";
-                string[] line = s.Split(' ');
-                for(int i = 0; i < line.Length -1; i ++)
-                {
-                    a += string.IsNullOrEmpty(a) ? line[i] : " " + line[i];
-                }
-                dict.Add(a, int.Parse(line[line.Length-1]));
-            }
-            WriteInCSV(CSVpath, dict);
-        }
-        public void LoadCSV()
-        {
-            Dictionary<string, int> dict = ReadInCSV(CSVpath);
-            foreach (string s in dict.Keys)
-            {
-                listBox1.Items.Add(s + " " + dict[s]);
-            }
-        }
+        //}
+        //public void SaveCSV()
+        //{
+        //    Dictionary<string, int> dict = new Dictionary<string, int>();
+        //    foreach(string s in listBox1.Items)
+        //    {    
+        //        string a = "";
+        //        string[] line = s.Split(' ');
+        //        for(int i = 0; i < line.Length -1; i ++)
+        //        {
+        //            a += string.IsNullOrEmpty(a) ? line[i] : " " + line[i];
+        //        }
+        //        dict.Add(a, int.Parse(line[line.Length-1]));
+        //    }
+        //    WriteInCSV(CSVpath, dict);
+        //}
+        //public void LoadCSV()
+        //{
+        //    Dictionary<string, int> dict = ReadInCSV(CSVpath);
+        //    foreach (string s in dict.Keys)
+        //    {
+        //        listBox1.Items.Add(s + " " + dict[s]);
+        //    }
+        //}
         private void button1_Click(object sender, EventArgs e)
         {
             UserSettings settings = new UserSettings();
@@ -129,11 +145,14 @@ namespace ITWeek
                         add2mysql(i, settings.label4.Text, settings.label6.Text, int.Parse(settings.label3.Text));
                         //list.Add(i + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);
                         //list.Add(listBox1.Items[i].ToString());
-                        listBox1.Items.Insert(i, i + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);
+                        Console.WriteLine("1");
+                        //listBox1.Items.Insert(i, i + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);
+                        UpdateBD();
                         end = true;
+                        break;
                     }
                 }
-                if (!end) { add2mysql(listBox1.Items.Count, settings.label4.Text, settings.label6.Text, int.Parse(settings.label3.Text)); listBox1.Items.Add(listBox1.Items.Count + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text); }
+                if (!end) { add2mysql(listBox1.Items.Count, settings.label4.Text, settings.label6.Text, int.Parse(settings.label3.Text)); /*listBox1.Items.Add(listBox1.Items.Count + " " + settings.label4.Text + " " + settings.label6.Text + " " + settings.label3.Text);*/UpdateBD(); }
 
             }
       //      SaveCSV();
@@ -142,9 +161,7 @@ namespace ITWeek
 
         public void uptd2mysql(int id, string name, string klass, int points)
         {
-
-            MySqlConnection connection = new MySqlConnection(conn_string.ToString());
-            connection.Open();
+            if (connection.State != ConnectionState.Open) { Connect2BD(); }
             MySqlCommand cmd = new MySqlCommand(string.Format("UPDATE students SET name='{1}',class='{2}',points={3} WHERE id = {0}", id, name, klass, points), connection);
             cmd.ExecuteNonQuery();
             connection.Close();
@@ -152,8 +169,7 @@ namespace ITWeek
         public void delFromMysql(int id)
         {
 
-            MySqlConnection connection = new MySqlConnection(conn_string.ToString());
-            connection.Open();
+            if (connection.State != ConnectionState.Open) { Connect2BD(); }
             MySqlCommand cmd = new MySqlCommand(string.Format("DELETE FROM students WHERE id = {0}", id), connection);
             cmd.ExecuteNonQuery();
             connection.Close();
@@ -164,7 +180,8 @@ namespace ITWeek
             if(listBox1.SelectedIndex!=-1)
             {
                 delFromMysql(int.Parse(listBox1.Items[listBox1.SelectedIndex].ToString().Split(' ')[0]));
-                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+                UpdateBD();
+                //listBox1.Items.RemoveAt(listBox1.SelectedIndex);
                 //SaveCSV();
             }
         }

@@ -27,7 +27,7 @@ namespace ITWeek
                 if(rf.ShowDialog() == DialogResult.OK)
                 {
                     Application.EnableVisualStyles();
-                    Application.Run(new ITWeek(rf.conninfo));
+                    Application.Run(new ITWeek(rf.conn_string));
                 }
             }else
             {
@@ -37,7 +37,7 @@ namespace ITWeek
                 if(lf.ShowDialog() == DialogResult.OK)
                 {
                     Application.EnableVisualStyles();
-                    Application.Run(new ITWeek(lf.conninfo));
+                    Application.Run(new ITWeek(lf.conn_string));
                 }
             }
             
