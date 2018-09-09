@@ -207,5 +207,15 @@ namespace ITWeek
                 }
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            UpdateBD();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            UpdateBD();
+        }
     }
 }
